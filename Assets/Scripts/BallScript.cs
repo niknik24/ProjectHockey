@@ -7,7 +7,7 @@ using UnityEngine;
 public class BallScript : MonoBehaviour
 {
 
-    float speed = 8;
+    // float speed = 8;
     float radius;
     public Vector2 direction;
     GameObject game;
@@ -29,7 +29,7 @@ public class BallScript : MonoBehaviour
         if (rb.isKinematic)
           if (Input.GetButtonDown("Fire1"))
         {
-           rb.isKinematic = false;
+          rb.isKinematic = false;
           rb.AddForce(direction);
         }
 

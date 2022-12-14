@@ -63,7 +63,7 @@ public class GameScript : MonoBehaviour
         {
             score[0]++;
         }
-        UnityEngine.Debug.Log(score[0]);
-       
+        UnityEngine.Debug.Log(score[0] + " : " + score[1]);
+        ScorePopup.Create(score);
     }
 }
