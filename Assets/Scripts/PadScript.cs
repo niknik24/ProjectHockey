@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,14 +17,16 @@ public class PadScript : MonoBehaviour
     public bool isRightPad;
     GameObject game;
 
+    private Rigidbody2D _rigidbody2D;
     // Start is called before the first frame update
     void Start()
     {
         height = transform.localScale.y;
         width = transform.localScale.x;
         game = GameObject.FindGameObjectWithTag("Script");
+        _rigidbody2D = GetComponent<Rigidbody2D>();
     }
-
+    
     public void Init(bool isRight)
     {
         isRightPad = isRight;
@@ -49,44 +52,17 @@ public class PadScript : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        float move = UnityEngine.Input.GetAxis(inpt) * Time.deltaTime * speed;
-        float move2 = UnityEngine.Input.GetAxis(inpt2) * Time.deltaTime * speed;
+        float move = UnityEngine.Input.GetAxis(inpt) * Time.fixedDeltaTime * speed;
+        float move2 = UnityEngine.Input.GetAxis(inpt2) * Time.fixedDeltaTime * speed;
+        
+        
 
-        if (transform.position.y < GameManager.bottomLeft.y + height / 2 && move2 < 0)
-        {
-            move2 = 0;
-        }
-
-        if (transform.position.x < GameManager.bottomLeft.x + width / 2 && move > 0)
-        {
-            move = 0;
-        }
-
-        if (transform.position.y > GameManager.topRight.y - height / 2 && move2 > 0)
-        {
-            move2 = 0;
-        }
-
-        if (transform.position.x > GameManager.topRight.x - width / 2 && move < 0)
-        {
-            move = 0;
-        }
-
-        if (inpt.Equals("PadRight"))
-        {
-            if (transform.position.x < 0 + width && move > 0)
-                move = 0;
-        }
-        if (inpt.Equals("PadLeft"))
-        {
-           if (transform.position.x > 0 - width && move < 0)
-               move = 0;
-        }
-
-        transform.Translate(move * Vector2.left);
-        transform.Translate(move2 * Vector2.up);
+        //transform.Translate(move * Vector2.left);
+        _rigidbody2D.MovePosition(transform.position + new Vector3(-move,move2,0));
+        //_rigidbody2D.AddForce(new Vector2(10*Math.Sign(-move), 10*Math.Sign(move2)));
+        //transform.Translate(move2 * Vector2.up);
     }
 
 }

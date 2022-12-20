@@ -25,14 +25,16 @@ public class GameManager : MonoBehaviour
         int rand = Random.Range(1, 2);
 
         if (rand == 1)
-            b.direction += new Vector2(10 * 30, 0);
+            b.direction = new Vector2(2, 0);
         else
-            b.direction += new Vector2(-(10 * 30), 0);
-        b.direction *=1 + 1 * ballVelocityMult;
+            b.direction = new Vector2(-2, 0);
+        b.direction *= 1 + ballVelocityMult;
 
 
         var padVar1 = Instantiate(pad);
+        padVar1.layer = 8;
         var padVar2 = Instantiate(pad);
+        padVar2.layer = 9;
         var p1 = padVar1.GetComponent<PadScript>();
         var p2 = padVar2.GetComponent<PadScript>();
         p1.Init(true);
