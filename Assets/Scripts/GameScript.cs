@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Security.Cryptography;
+using TMPro;
 
 public class GameScript : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class GameScript : MonoBehaviour
     float pend_dur = 0f;
     public float ballVelocityMult = 1.2f;
 
+    [SerializeField] private TextMeshProUGUI _scoreTextUI; 
     // Start is called before the first frame update
     void Start()
     {
@@ -21,14 +23,15 @@ public class GameScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if (pend_dur < 0 && !_isFrozen)
-        //{
-          //  StartCoroutine(Freeze(false));
-        //}
+        if (pend_dur < 0 && !_isFrozen)
+        {
+            StartCoroutine(Freeze(false));
+        }
     }
 
     public IEnumerator Freeze(bool pad)
     {
+        _scoreTextUI.text = string.Empty;
         UnityEngine.Debug.Log(score[0]);
         _isFrozen = true;
         var original = Time.timeScale;
@@ -43,10 +46,11 @@ public class GameScript : MonoBehaviour
         var b = obj.GetComponent<BallScript>();
 
         if (pad)
-            b.direction += new Vector2(-(40 * 10), 0);
+            b.direction = new Vector2(-2, 0);
         else
-            b.direction += new Vector2((40 * 10), 0);
-        b.direction *= 1 + 1 * ballVelocityMult;
+            b.direction = new Vector2(2, 0);
+        b.direction *= 1 + ballVelocityMult;
+        _scoreTextUI.text = $"{score[0]} : {score[1]}";
     }
 
     

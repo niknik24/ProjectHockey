@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 public class BallScript : MonoBehaviour
 {
@@ -26,35 +28,19 @@ public class BallScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (rb.isKinematic)
-          if (Input.GetButtonDown("Fire1"))
+        if (rb.isKinematic && Input.GetButtonDown("Fire1"))
         {
           rb.isKinematic = false;
           rb.AddForce(direction);
         }
-
-        if (transform.position.y < GameManager.bottomLeft.y + radius && rb.velocity.y < 0)
-        {
-            rb.velocity = new Vector2(rb.velocity.x, -rb.velocity.y);
-        }
-
-        if (transform.position.y > GameManager.topRight.y - radius && rb.velocity.y > 0)
-        {
-            rb.velocity = new Vector2(rb.velocity.x, -rb.velocity.y);
-        }
-
-        if (transform.position.x < GameManager.bottomLeft.x + radius && rb.velocity.x < 0)
-        {
-            Destroy(gameObject);
-            game.GetComponent<GameScript>().onGoal(true);
-        }
-
-
-        if (transform.position.x > GameManager.topRight.x - radius && rb.velocity.x > 0)
-        {
-            Destroy(gameObject);
-            game.GetComponent<GameScript>().onGoal(false);
-        }
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag.Contains("KillWall"))
+        {
+            Destroy(gameObject);
+            game.GetComponent<GameScript>().onGoal(collision.gameObject.tag.Contains("Left"));
+        }
+    }
 }

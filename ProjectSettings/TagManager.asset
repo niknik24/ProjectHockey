@@ -6,6 +6,11 @@ TagManager:
   tags:
   - Pad
   - Script
+  - KillWallLeft
+  - KillWallRight
+  - left
+  - right
+  - Pad2
   layers:
   - Default
   - TransparentFX
@@ -13,10 +18,10 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
+  - left
+  - right
+  - pad1
+  - pad2
   - 
   - 
   - 
