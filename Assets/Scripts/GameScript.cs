@@ -7,13 +7,18 @@ using TMPro;
 public class GameScript : MonoBehaviour
 {
     public GameObject ball;
+    public GameObject pad;
     public int[] score;
     public float duration = 1f;
     bool _isFrozen = false;
+    bool _gameFinished = false;
     float pend_dur = 0f;
     public float ballVelocityMult = 1.2f;
+    public GameObject EndGameUI;
 
-    [SerializeField] private TextMeshProUGUI _scoreTextUI; 
+    [SerializeField] private TextMeshProUGUI _EndScoreUI;
+    [SerializeField] private TextMeshProUGUI _WinnerTextUI;
+    [SerializeField] private TextMeshProUGUI _scoreTextUI;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,6 +28,11 @@ public class GameScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape) && _gameFinished)
+        {
+            Restart();
+        }
+
         if (pend_dur < 0 && !_isFrozen)
         {
             StartCoroutine(Freeze(false));
@@ -32,7 +42,6 @@ public class GameScript : MonoBehaviour
     public IEnumerator Freeze(bool pad)
     {
         _scoreTextUI.text = string.Empty;
-        UnityEngine.Debug.Log(score[0]);
         _isFrozen = true;
         var original = Time.timeScale;
         Time.timeScale = 0.3f;
@@ -53,7 +62,7 @@ public class GameScript : MonoBehaviour
         _scoreTextUI.text = $"{score[0]} : {score[1]}";
     }
 
-    
+
 
     public void onGoal(bool pad)
     {
@@ -67,7 +76,35 @@ public class GameScript : MonoBehaviour
         {
             score[0]++;
         }
-        UnityEngine.Debug.Log(score[0] + " : " + score[1]);
+        if (score[0] == 3 || score[1] == 3)
+        {
+            _WinnerTextUI.text = (score[0] == 3) ? "Left player win" : "Right player win";
+            _EndScoreUI.text = $"{score[0]} : {score[1]}";
+            EndGameUI.SetActive(true);
+            Time.timeScale = 0f;
+            foreach(GameObject p in GameObject.FindGameObjectsWithTag("Pad"))
+                Destroy(p);
+            _gameFinished = true;
+            return;
+        }
+
         ScorePopup.Create(score);
+    }
+
+    public void Restart()
+    {
+        _gameFinished = false;
+        _scoreTextUI.text = string.Empty;
+        score[0] = 0;
+        score[1] = 0;
+        EndGameUI.SetActive(false);
+        var padVar1 = Instantiate(pad);
+        padVar1.layer = 8;
+        var padVar2 = Instantiate(pad);
+        padVar2.layer = 9;
+        var p1 = padVar1.GetComponent<PadScript>();
+        var p2 = padVar2.GetComponent<PadScript>();
+        p1.Init(true);
+        p2.Init(false);
     }
 }
