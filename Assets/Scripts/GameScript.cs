@@ -7,6 +7,7 @@ using TMPro;
 public class GameScript : MonoBehaviour
 {
     public GameObject ball;
+    public GameObject ballcl;
     public GameObject pad;
     public int[] score;
     public float duration = 1f;
@@ -36,6 +37,24 @@ public class GameScript : MonoBehaviour
         if (pend_dur < 0 && !_isFrozen)
         {
             StartCoroutine(Freeze(false));
+        }
+
+
+        if (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.RightControl)) {
+
+            ballcl = GameObject.Find("Ball(Clone)");
+            Destroy(ballcl);
+
+            var obj = Instantiate(ball);
+            var b = obj.GetComponent<BallScript>();
+
+            int rand = Random.Range(1, 2);
+
+            if (rand == 1)
+                b.direction = new Vector2(2, 0);
+            else
+                b.direction = new Vector2(-2, 0);
+            b.direction *= 1 + ballVelocityMult;
         }
     }
 
